@@ -29,4 +29,20 @@ describe('Login spec', () => {
 
     cy.url().should('include', '/sessions');
   });
+
+  it('should not log in successfully with incorrect credentials', () => {
+    cy.visit('/login');
+
+    cy.get('input[formControlName=email]').type('yogaa@studio.com');
+    cy.get('input[formControlName=password]').type(
+      `${'test!1234'}{enter}{enter}`
+    );
+
+    cy.get('div.login')
+      .find('mat-card')
+      .find('form.login-form')
+      .find('p')
+      .contains('An error occurred')
+      .should('be.visible');
+  });
 });

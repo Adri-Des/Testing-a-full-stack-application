@@ -1,6 +1,7 @@
 package com.openclassrooms.starterjwt.security.jwt;
 
 import java.io.IOException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,3 +42,4 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
   }
 
 }
+      
