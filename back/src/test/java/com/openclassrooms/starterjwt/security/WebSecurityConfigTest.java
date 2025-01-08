@@ -1,6 +1,7 @@
 package com.openclassrooms.starterjwt.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 //import com.openclassrooms.starterjwt.controllers.AuthController;
 
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,12 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.openclassrooms.starterjwt.security.jwt.JwtUtils;
+import com.openclassrooms.starterjwt.security.services.UserDetailsImpl;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -26,6 +33,9 @@ public class WebSecurityConfigTest {
 
     @Autowired
     private MockMvc mockMvc;
+    
+    @Autowired
+    private JwtUtils jwtUtils;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -60,7 +70,21 @@ public class WebSecurityConfigTest {
 
     @Test
     public void givenValidJwt_whenAccessProtectedEndpoint_thenOk() throws Exception {
-        String validJwt = " eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5b2dhQHN0dWRpby5jb20iLCJpYXQiOjE3MzYxNDgxODAsImV4cCI6MTczNjIzNDU4MH0.fx8eV5QsfZAYmhi8N3gjqAZVHyFcJu9PfrFl3E1SmUg-I7EY8cTGO-imrPF2hYmQB5aOJmUCodrMwr--bTYEQQ";
+    	
+    	 // Créer un utilisateur simulé
+        UserDetailsImpl userDetails = UserDetailsImpl.builder()
+                .id(1L)
+                .username("yoga@studio.com")
+                .password("test!1234")
+                .build();
+        
+     // Simuler une authentification
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null);
+        
+        // Générer un token JWT valide
+        String validJwt = jwtUtils.generateJwtToken(authentication);
+        
+       // String validJwt = " eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5b2dhQHN0dWRpby5jb20iLCJpYXQiOjE3MzYxNDgxODAsImV4cCI6MTczNjIzNDU4MH0.fx8eV5QsfZAYmhi8N3gjqAZVHyFcJu9PfrFl3E1SmUg-I7EY8cTGO-imrPF2hYmQB5aOJmUCodrMwr--bTYEQQ";
 
         mockMvc.perform(get("/api/session")
                 .header("Authorization", "Bearer " + validJwt))
