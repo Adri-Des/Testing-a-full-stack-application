@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('Login spec', () => {
+describe('Login page E2E tests', () => {
   it('Login successfull', () => {
     cy.visit('/login');
 
