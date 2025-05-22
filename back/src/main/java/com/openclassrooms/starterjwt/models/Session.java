@@ -2,6 +2,7 @@ package com.openclassrooms.starterjwt.models;
 
 
 import lombok.*;
+
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;

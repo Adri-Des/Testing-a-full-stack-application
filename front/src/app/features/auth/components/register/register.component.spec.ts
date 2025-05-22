@@ -17,10 +17,12 @@ describe('RegisterComponent (Unit tests)', () => {
   let mockAuthService: any;
   let mockRouter: any;
 
+  // Set up the test module with mocked AuthService and Router
   beforeEach(async () => {
     mockAuthService = {
       register: jest.fn().mockReturnValue(of(null)),
     };
+    // Mock router navigation method
     mockRouter = {
       navigate: jest.fn(),
     };
@@ -35,6 +37,7 @@ describe('RegisterComponent (Unit tests)', () => {
     }).compileComponents();
   });
 
+  // Create the component before each test
   beforeEach(() => {
     fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;
@@ -59,11 +62,13 @@ describe('RegisterComponent (Unit tests)', () => {
 
     component.submit();
 
+    // Register was NOT called and error flag is true
     expect(mockAuthService.register).not.toHaveBeenCalled();
     expect(component.onError).toBe(true);
   });
 
   it('should call register with form data if the form is valid', () => {
+    // Set valid form values
     component.form.setValue({
       email: 'test@gmail.com',
       firstName: 'User',
@@ -74,6 +79,7 @@ describe('RegisterComponent (Unit tests)', () => {
     mockAuthService.register.mockReturnValue(of(null));
     component.submit();
 
+    // Check register called with correct data
     expect(mockAuthService.register).toHaveBeenCalledWith({
       email: 'test@gmail.com',
       firstName: 'User',
@@ -108,6 +114,7 @@ describe('RegisterComponent (Integration tests)', () => {
   let authService: AuthService;
   let router: Router;
 
+  // Set up the testing module with real service instances
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RegisterComponent],
@@ -120,6 +127,7 @@ describe('RegisterComponent (Integration tests)', () => {
     }).compileComponents();
   });
 
+  // Create component and inject services
   beforeEach(() => {
     fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;
@@ -134,6 +142,7 @@ describe('RegisterComponent (Integration tests)', () => {
       .spyOn(authService, 'register')
       .mockReturnValue(of(undefined));
 
+    // Fill in valid form data
     component.form.setValue({
       email: 'test@gmail.com',
       firstName: 'User',
@@ -143,6 +152,7 @@ describe('RegisterComponent (Integration tests)', () => {
 
     component.submit();
 
+    // Check if register API was called with form values
     expect(registerSpy).toHaveBeenCalledWith({
       email: 'test@gmail.com',
       firstName: 'User',

@@ -16,6 +16,7 @@ describe('LoginComponent (Unit tests)', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
 
+  // Mock services to replace real implementations during testing
   const mockAuthService = {
     login: jest.fn(),
   };
@@ -28,6 +29,7 @@ describe('LoginComponent (Unit tests)', () => {
     navigate: jest.fn(),
   };
 
+  // Setup the testing module with necessary dependencies and mocks
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [LoginComponent],
@@ -41,12 +43,14 @@ describe('LoginComponent (Unit tests)', () => {
     }).compileComponents();
   });
 
+  // Create component instance
   beforeEach(() => {
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
+  // Reset all mock functions after each test
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -55,6 +59,7 @@ describe('LoginComponent (Unit tests)', () => {
     expect(component).toBeTruthy();
   });
 
+  // Should call AuthService login and navigate if form is valid
   it('should call login when form is valid', () => {
     const loginRequest = {
       email: 'test@example.com',
@@ -66,6 +71,7 @@ describe('LoginComponent (Unit tests)', () => {
 
     component.submit();
 
+    // Login was called with form data and navigation occurred
     expect(mockAuthService.login).toHaveBeenCalledWith(loginRequest);
     expect(mockSessionService.logIn).toHaveBeenCalled();
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/sessions']);
@@ -78,6 +84,7 @@ describe('LoginComponent (Unit tests)', () => {
     };
     component.form.setValue(loginRequest);
 
+    // Mock failed login response
     mockAuthService.login.mockReturnValue(
       throwError(() => new Error('An error occurred'))
     );
@@ -88,11 +95,13 @@ describe('LoginComponent (Unit tests)', () => {
   });
 
   it('should show error if form is invalid', () => {
+    // Set empty form values
     component.form.setValue({ email: '', password: '' });
 
     component.submit();
 
     expect(component.onError).toBe(true);
+    // Login should not be called
     expect(mockAuthService.login).not.toHaveBeenCalled();
   });
 });
@@ -115,6 +124,7 @@ describe('LoginComponent (Integration Tests)', () => {
     navigate: jest.fn(),
   };
 
+  // Setup module with RouterTestingModule for integration
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [LoginComponent],
@@ -159,6 +169,7 @@ describe('LoginComponent (Integration Tests)', () => {
     component.form.setValue(loginRequest);
     component.submit();
 
+    // Assertions are delayed to simulate async behavior
     setTimeout(() => {
       expect(mockAuthService.login).toHaveBeenCalledWith(loginRequest);
       expect(mockSessionService.logIn).toHaveBeenCalledWith(mockSessionInfo);

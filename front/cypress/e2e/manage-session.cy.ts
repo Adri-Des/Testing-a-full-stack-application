@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 
 describe('Manage Sessions E2E Tests', () => {
+  // Tests for Admin user
   describe('If Admin', () => {
     const body = {
       id: 1,
@@ -8,16 +9,19 @@ describe('Manage Sessions E2E Tests', () => {
       firstName: 'firstName',
       lastName: 'lastName',
       admin: true,
+      // mock JWT
       token:
         'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5b2dhQHN0dWRpby5jb20iLCJpYXQiOjE3MzQ0NTQxMjQsImV4cCI6MTczNDU0MDUyNH0.IjJms7bpHQp841H1eCr-fdo8MlbH4T4PwIp--QsVvIEV6Ga4s4dxgRyVLfrIxmwxS0VRCN-YNOZ1Xmpbzy8sQA',
     };
 
+    // Setup before each test
     beforeEach(() => {
       cy.visit('/login');
 
-      // Simuler une authentification réussie
+      // Mock login
       cy.intercept('POST', '/api/auth/login', body);
 
+      // Mock API response
       cy.intercept('GET', '/api/teacher', (req) => {
         /*expect(req.headers['Authorization']).to.equal(
         'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5b2dhQHN0dWRpby5jb20iLCJpYXQiOjE3MzQzNTk1NTQsImV4cCI6MTczNDQ0NTk1NH0.OAZy6bKfubGJtcXRhw_CG67ndNLXCaBbH7ulqbInV4pTrxo0RJiiw6gSVQAHp4ijevtcDndLVyjOr09w5FGGQg}'
@@ -99,7 +103,7 @@ describe('Manage Sessions E2E Tests', () => {
         },
       }).as('updateSession');
 
-      // Saisir les informations de connexion
+      // Fill login and simulate authentication
       cy.get('input[formControlName=email]').type('yoga@studio.com');
       cy.get('input[formControlName=password]').type(
         `${'test!1234'}{enter}{enter}`
@@ -117,8 +121,6 @@ describe('Manage Sessions E2E Tests', () => {
     });
 
     it('should display a list of sessions', () => {
-      // Intercepter l'API des sessions
-
       //cy.visit('/sessions');
 
       //cy.wait('@getSessions');
@@ -145,10 +147,9 @@ describe('Manage Sessions E2E Tests', () => {
       cy.get('button[routerLink="create"]').click();
 
       //cy.visit('/sessions/create');
-      // S'assurer que les enseignants sont chargés
 
       cy.get('form').should('exist');
-      // Remplissage du formulaire
+      // Fill form
       cy.get('input[formControlName="name"]').type('New Session');
       cy.get('input[formControlName="date"]').type('2024-12-15');
       cy.get('mat-select[formControlName="teacher_id"]').click();
@@ -157,11 +158,10 @@ describe('Manage Sessions E2E Tests', () => {
         'New session description'
       );
 
-      // Soumission du formulaire
+      // Submit form
       cy.get('button[type="submit"]').click();
       cy.wait('@createSession');
 
-      // Vérification
       cy.url().should('include', '/sessions');
     });
 
@@ -211,6 +211,7 @@ describe('Manage Sessions E2E Tests', () => {
     });
   });
 
+  // Tests for non-admin user
   describe('if not Admin', () => {
     const body = {
       id: 1,
