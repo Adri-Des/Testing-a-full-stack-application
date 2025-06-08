@@ -1,6 +1,7 @@
 package com.openclassrooms.starterjwt.mapper;
 
 import com.openclassrooms.starterjwt.dto.SessionDto;
+import com.openclassrooms.starterjwt.dto.TeacherDto;
 import com.openclassrooms.starterjwt.models.Session;
 import com.openclassrooms.starterjwt.models.User;
 import com.openclassrooms.starterjwt.models.Teacher;
@@ -14,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.security.PrivateKey;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +37,8 @@ class SessionMapperTest {
 
     private User mockUser1;
     private User mockUser2;
+    private Teacher mockTeacher1;
+    private Teacher mockTeacher2;
 
     @BeforeEach
     void setUp() {
@@ -43,6 +47,12 @@ class SessionMapperTest {
 
         mockUser2 = new User();
         mockUser2.setId(2L);
+        
+        mockTeacher1 = new Teacher();
+        mockTeacher1.setId(10L);
+        
+        mockTeacher2 = new Teacher();
+        mockTeacher2.setId(11L);
     }
 
     @Test
@@ -51,9 +61,9 @@ class SessionMapperTest {
         SessionDto sessionDto = new SessionDto();
         sessionDto.setDescription("Test Description");
         sessionDto.setTeacher_id(10L);
-        sessionDto.setUsers(Arrays.asList(1L, 2L));
+        sessionDto.setUsers(Arrays.asList(mockUser1.getId(), (mockUser2.getId())));
 
-        when(teacherService.findById(10L)).thenReturn(new Teacher()); // Mocked teacher
+        when(teacherService.findById(10L)).thenReturn(mockTeacher1); 
         when(userService.findById(1L)).thenReturn(mockUser1);
         when(userService.findById(2L)).thenReturn(mockUser2);
 
@@ -73,12 +83,9 @@ class SessionMapperTest {
     @Test
     void givenSession_whenToDto_thenMapsCorrectly() {
         // Arrange
-        Teacher teacher = new Teacher();
-        teacher.setId(10L);
-
         Session session = new Session();
         session.setDescription("Test Description");
-        session.setTeacher(teacher);
+        session.setTeacher(mockTeacher1);
         session.setUsers(Arrays.asList(mockUser1, mockUser2));
 
         // Act
@@ -93,33 +100,69 @@ class SessionMapperTest {
         assertTrue(sessionDto.getUsers().contains(2L));
     }
 
+  
+    
     @Test
-    void givenSessionDtoWithNullUsers_whenToEntity_thenMapsEmptyList() {
+    void givenSessionDtoListToEntityList() {
         // Arrange
-        SessionDto sessionDto = new SessionDto();
-        sessionDto.setDescription("Test Description");
+        SessionDto dto1 = new SessionDto();
+        dto1.setId(1L);
+        dto1.setDescription("Session 1");
+        dto1.setTeacher_id(10L);
+        dto1.setUsers(Arrays.asList(mockUser1.getId(), (mockUser2.getId())));
+
+        SessionDto dto2 = new SessionDto();
+        dto2.setId(2L);
+        dto2.setDescription("Session 2");
+        dto2.setTeacher_id(11L);
+        dto2.setUsers(Arrays.asList(mockUser2.getId()));
+
+
+        when(teacherService.findById(10L)).thenReturn(mockTeacher1);
+        when(teacherService.findById(11L)).thenReturn(mockTeacher2);
+        when(userService.findById(1L)).thenReturn(mockUser1);
+        when(userService.findById(2L)).thenReturn(mockUser2);
+
+        List<SessionDto> dtoList = List.of(dto1, dto2);
 
         // Act
-        Session session = sessionMapper.toEntity(sessionDto);
+        List<Session> sessions = sessionMapper.toEntity(dtoList);
 
         // Assert
-        assertNotNull(session);
-        assertEquals("Test Description", session.getDescription());
-        assertTrue(session.getUsers().isEmpty());
+        assertNotNull(sessions);
+        assertEquals(2, sessions.size());
+
+        assertEquals("Session 1", sessions.get(0).getDescription());
+        assertEquals(10L, sessions.get(0).getTeacher().getId());
+        assertEquals(2, sessions.get(0).getUsers().size());
+
+        assertEquals("Session 2", sessions.get(1).getDescription());
+        assertEquals(11L, sessions.get(1).getTeacher().getId());
+        assertEquals(1, sessions.get(1).getUsers().size());
     }
-
+    
+    
     @Test
-    void givenSessionWithNullUsers_whenToDto_thenMapsEmptyList() {
-        // Arrange
-        Session session = new Session();
-        session.setDescription("Test Description");
-
+    void givenNullDto_whenToEntity_thenReturnNull() {
+        Session session = sessionMapper.toEntity((SessionDto)null);
+        assertNull(session);
+    }
+    
+    @Test
+    void givenNullSession_whentoDto_thenReturnNull() {
         // Act
-        SessionDto sessionDto = sessionMapper.toDto(session);
+        SessionDto sessionDto = sessionMapper.toDto((Session)null);
 
         // Assert
-        assertNotNull(sessionDto);
-        assertEquals("Test Description", sessionDto.getDescription());
-        assertTrue(sessionDto.getUsers().isEmpty());
+        assertNull(sessionDto);
+    }
+    
+    @Test
+    void givenNullDtoList_whenToEntity_thenReturnNull() {
+        // Act
+        List<Session> sessions = sessionMapper.toEntity((List<SessionDto>)null);
+
+        // Assert
+        assertNull(sessions);
     }
 }

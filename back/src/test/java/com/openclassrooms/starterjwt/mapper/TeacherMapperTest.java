@@ -1,13 +1,18 @@
 package com.openclassrooms.starterjwt.mapper;
 
 import com.openclassrooms.starterjwt.dto.TeacherDto;
+import com.openclassrooms.starterjwt.dto.UserDto;
 import com.openclassrooms.starterjwt.models.Teacher;
+import com.openclassrooms.starterjwt.models.User;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 class TeacherMapperTest {
@@ -19,8 +24,8 @@ class TeacherMapperTest {
         // Arrange
         TeacherDto teacherDto = new TeacherDto();
         teacherDto.setId(1L);
-        teacherDto.setFirstName("Teacher");
-        teacherDto.setLastName("Test");
+        teacherDto.setFirstName("Jean");
+        teacherDto.setLastName("Nette");
        
 
         // Act
@@ -29,8 +34,8 @@ class TeacherMapperTest {
         // Assert
         assertNotNull(teacher);
         assertEquals(1L, teacher.getId());
-        assertEquals("Teacher", teacher.getFirstName());
-        assertEquals("Test", teacher.getLastName());
+        assertEquals("Jean", teacher.getFirstName());
+        assertEquals("Nette", teacher.getLastName());
        
     }
 
@@ -54,22 +59,78 @@ class TeacherMapperTest {
        
     }
 
-    /*
     @Test
-    void givenNullTeacherDto_whenToEntity_thenReturnsNull() {
-        // Act
-        Teacher teacher = teacherMapper.toEntity(null);
+    void givenTeacherDtoList_whenToEntityList_thenMapsCorrectly() {
+        TeacherDto dto1 = new TeacherDto();
+        dto1.setId(1L);
+        dto1.setFirstName("Jean");
+        dto1.setLastName("Nette");
+       
 
-        // Assert
-        assertNull(teacher);
+        TeacherDto dto2 = new TeacherDto();
+        dto2.setId(2L);
+        dto2.setFirstName("Jean");
+        dto2.setLastName("Yves");
+        
+
+        List<Teacher> teachers = teacherMapper.toEntity(List.of(dto1, dto2));
+
+        assertEquals(2, teachers.size());
+        assertEquals("Jean", teachers.get(0).getFirstName());
+        assertEquals("Jean", teachers.get(1).getFirstName());
     }
 
+    
     @Test
-    void givenNullTeacher_whenToDto_thenReturnsNull() {
+    void givenTeacherList_whenToDtoList_thenMapsCorrectly() {
+        Teacher teacher1 = new Teacher();
+        teacher1.setId(1L);
+        teacher1.setFirstName("Jean");
+        teacher1.setLastName("Nette");
+        
+
+        Teacher teacher2 = new Teacher();
+        teacher2.setId(2L);
+        teacher2.setFirstName("Jean");
+        teacher2.setLastName("Yves");
+
+        List<TeacherDto> dtos = teacherMapper.toDto(List.of(teacher1, teacher2));
+
+        assertEquals(2, dtos.size());
+        assertEquals("Jean", dtos.get(0).getFirstName());
+        assertEquals("Jean", dtos.get(1).getFirstName());
+    }
+    
+    @Test
+    void givenNullDto_whenToEntity_thenReturnNull() {
+        Teacher teacher = teacherMapper.toEntity((TeacherDto)null);
+        assertNull(teacher);
+    }
+    
+    @Test
+    void givenNullTeacher_whentoDto_thenReturnNull() {
         // Act
-        TeacherDto teacherDto = teacherMapper.toDto(null);
+        TeacherDto teacherDto = teacherMapper.toDto((Teacher)null);
 
         // Assert
         assertNull(teacherDto);
-    }*/
+    }
+    
+    @Test
+    void givenNullDtoList_whenToEntity_thenReturnNull() {
+        // Act
+        List<Teacher> teachers = teacherMapper.toEntity((List<TeacherDto>)null);
+
+        // Assert
+        assertNull(teachers);
+    }
+    
+    @Test
+    void givenNullTeacherList_whentoDto_thenReturnNull() {
+        // Act
+        List<TeacherDto> dtos = teacherMapper.toDto((List<Teacher>)null);
+
+        // Assert
+        assertNull(dtos);
+    }
 }

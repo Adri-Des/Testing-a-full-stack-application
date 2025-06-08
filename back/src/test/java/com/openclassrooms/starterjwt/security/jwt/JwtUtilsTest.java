@@ -58,8 +58,8 @@ class JwtUtilsIntegrationTest {
         // Arrange
         String expiredToken = Jwts.builder()
                 .setSubject("testuser@gmail.com")
-                .setIssuedAt(new Date(System.currentTimeMillis() - 10000)) // 10 secondes dans le passé
-                .setExpiration(new Date(System.currentTimeMillis() - 5000)) // 5 secondes dans le passé
+                .setIssuedAt(new Date(System.currentTimeMillis() - 10000)) 
+                .setExpiration(new Date(System.currentTimeMillis() - 5000)) 
                 .signWith(SignatureAlgorithm.HS512, "testSecretKey")
                 .compact();
 
@@ -76,7 +76,7 @@ class JwtUtilsIntegrationTest {
         String tokenWithDifferentSecret = Jwts.builder()
                 .setSubject("testuser@gmail.com")
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 60000)) // Valide pour 1 minute
+                .setExpiration(new Date(System.currentTimeMillis() + 60000)) 
                 .signWith(SignatureAlgorithm.HS512, "differentSecretKey")
                 .compact();
 
