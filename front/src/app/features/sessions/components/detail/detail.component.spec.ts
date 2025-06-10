@@ -17,7 +17,7 @@ import { Session } from '../../interfaces/session.interface';
 import { Teacher } from '../../../../interfaces/teacher.interface';
 import { DetailComponent } from './detail.component';
 
-/* Tests unitaires */
+/* Unit testing */
 
 describe('DetailComponent, (Unit tests)', () => {
   let component: DetailComponent;
