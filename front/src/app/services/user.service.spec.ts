@@ -26,7 +26,7 @@ import { UserService } from './user.service';
   });
 });*/
 
-/* Tests d'intégration */
+/* Integration testing */
 
 describe('UserService', () => {
   let service: UserService;
