@@ -11,7 +11,7 @@ import { SessionInformation } from 'src/app/interfaces/sessionInformation.interf
 
 import { LoginComponent } from './login.component';
 
-/* Tests unitaires */
+/* Unit testing */
 describe('LoginComponent (Unit tests)', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
@@ -106,7 +106,7 @@ describe('LoginComponent (Unit tests)', () => {
   });
 });
 
-/* Tests d'intégration */
+/* Integration testing */
 
 describe('LoginComponent (Integration Tests)', () => {
   let component: LoginComponent;
