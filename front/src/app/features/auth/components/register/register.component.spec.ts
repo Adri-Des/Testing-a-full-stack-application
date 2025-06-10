@@ -9,7 +9,7 @@ import { AuthService } from '../../services/auth.service';
 
 import { RegisterComponent } from './register.component';
 
-/* Tests unitaires */
+/* Unit testing */
 
 describe('RegisterComponent (Unit tests)', () => {
   let component: RegisterComponent;
@@ -106,7 +106,7 @@ describe('RegisterComponent (Unit tests)', () => {
   });
 });
 
-/* Tests intégration */
+/* Integration testing */
 
 describe('RegisterComponent (Integration tests)', () => {
   let component: RegisterComponent;
