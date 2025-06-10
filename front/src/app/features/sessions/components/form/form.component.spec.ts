@@ -26,7 +26,7 @@ import { Session } from '../../interfaces/session.interface';
 
 import { FormComponent } from './form.component';
 
-/* Tests unitaires */
+/* Unit testing */
 
 describe('FormComponent', () => {
   let component: FormComponent;
@@ -132,14 +132,14 @@ describe('FormComponent', () => {
       })
     );
 
-    // Mock la méthode update
+    // Mock update method
     jest.spyOn(mockSessionApiService, 'update').mockReturnValue(of({}));
 
-    // Simule que le composant est en mode mise à jour
+    
     mockRouter.url = '/sessions/update';
     component.ngOnInit();
 
-    // Configure les valeurs du formulaire
+    // Configures form values
     component.sessionForm?.setValue({
       name: 'Updated Session',
       date: '2024-01-01',
@@ -147,10 +147,10 @@ describe('FormComponent', () => {
       description: 'Updated description',
     });
 
-    // Appelle la méthode submit
+    // Call submit method
     component.submit();
 
-    // Vérifie que la méthode update a été appelée avec les bons paramètres
+    // Checks that the update method has been called with the correct parameters
     expect(mockSessionApiService.update).toHaveBeenCalledWith(
       '1',
       component.sessionForm?.value
