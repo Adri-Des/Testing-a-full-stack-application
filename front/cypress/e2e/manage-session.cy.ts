@@ -197,15 +197,15 @@ describe('Manage Sessions E2E Tests', () => {
     it('Should log out the user and redirect to home', () => {
       cy.contains('span', 'Logout').click(); // Clique sur Logout
 
-      // Vérifier que l'utilisateur n'est plus connecté
+      // Check that the user is no longer logged in
       cy.window().then((win) => {
         expect(win.sessionStorage.getItem('isLogged')).to.be.null;
       });
 
-      // Vérifier la redirection vers l'accueil
+      
       //cy.url().should('eq', `${Cypress.config().baseUrl}/`);
 
-      // Vérifier que les boutons Login et Register réapparaissent
+      // Check that the Login and Register buttons reappear
       cy.contains('span', 'Login').should('be.visible');
       cy.contains('span', 'Register').should('be.visible');
     });
