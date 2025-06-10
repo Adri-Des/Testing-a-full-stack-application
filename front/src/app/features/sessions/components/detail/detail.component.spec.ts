@@ -191,7 +191,7 @@ describe('DetailComponent, (Unit tests)', () => {
     expect(req.request.method).toBe('DELETE');
     req.flush({}); // Retourne une réponse vide
 
-    // Aucun autre effet attendu dans ce test
+   
   });
 
   it('should participate in a session', () => {
