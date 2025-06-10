@@ -11,7 +11,7 @@ import { expect } from '@jest/globals';
 import { SessionApiService } from './session-api.service';
 import { Session } from '../interfaces/session.interface';
 
-/* Tests unitaires */
+/* Unit testing */
 
 describe('SessionApiService', () => {
   let service: SessionApiService;
