@@ -26,7 +26,7 @@ import { TeacherService } from './teacher.service';
   });
 });*/
 
-/* Tests unitaires */
+/* Unit testing */
 
 describe('TeacherService', () => {
   let service: TeacherService;
